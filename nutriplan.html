@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Dietético Semanal — 28 Jun / 4 Jul 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Playfair+Display:wght=700&display=swap');
+
+  :root {
+    --verde: #2D6A4F;
+    --verde-claro: #52B788;
+    --verde-muy-claro: #D8F3DC;
+    --naranja: #E07A2F;
+    --naranja-claro: #F4A261;
+    --crema: #FEFAE0;
+    --gris-claro: #F5F5F5;
+    --gris: #888;
+    --negro: #1a1a1a;
+    --blanco: #ffffff;
+    --borde: #d0d0d0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 9pt;
+    color: var(--negro);
+    background: white;
+    line-height: 1.4;
+    padding-bottom: 40px;
+  }
+
+  /* ===== PORTADA ===== */
+  .portada {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--verde);
+    color: white;
+    text-align: center;
+    padding: 40px;
+  }
+  .portada .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 42pt;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .portada .subtitulo {
+    font-size: 11pt;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-bottom: 60px;
+  }
+  .portada .nombre {
+    font-size: 22pt;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .portada .semana {
+    font-size: 13pt;
+    font-weight: 300;
+    opacity: 0.9;
+    margin-bottom: 60px;
+  }
+  .portada .datos-base {
+    background: rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 24px 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+    max-width: 600px;
+    width: 100%;
+  }
+  .portada .dato { text-align: center; }
+  .portada .dato-valor { font-size: 18pt; font-weight: 700; }
+  .portada .dato-label { font-size: 7pt; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7; margin-top: 2px; }
+  .portada .objetivo {
+    background: var(--naranja);
+    border-radius: 8px;
+    padding: 16px 32px;
+    font-size: 10pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .portada .nota-hrv {
+    margin-top: 24px;
+    font-size: 8pt;
+    opacity: 0.65;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  /* ===== RESUMEN SEMANAL ===== */
+  .resumen-semanal {
+    padding: 20px 24px;
+  }
+  .encabezado-seccion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--verde);
+  }
+  .encabezado-seccion h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16pt;
+    color: var(--verde);
+  }
+  .tabla-semanal {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 7.5pt;
+  }
+  .tabla-semanal th {
+    background: var(--verde);
+    color: white;
+    padding: 6px 4px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 7pt;
+    letter-spacing: 0.5px;
+  }
+  .tabla-semanal th.col-meal { background: #1a4a36; text-align: left; padding-left: 8px; width: 70px; }
+  .tabla-semanal td {
+    border: 1px solid var(--borde);
+    padding: 5px 4px;
+    vertical-align: top;
+    text-align: center;
+    font-size: 7pt;
+  }
+  .tabla-semanal td.meal-label {
+    background: var(--verde-muy-claro);
+    font-weight: 700;
+    color: var(--verde);
+    text-align: left;
+    padding-left: 8px;
+    font-size: 7pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .tabla-semanal tr:nth-child(even) td:not(.meal-label) { background: #fafafa; }
+  .chip-entreno {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 10px;
+    font-size: 6pt;
+    font-weight: 700;
+    margin-bottom: 3px;
+    letter-spacing: 0.3px;
+  }
+  .chip-strong { background: #FFE5CC; color: #B84800; }
+  .chip-hiit { background: #FFD6D6; color: #B80000; }
+  .chip-spin { background: #D6E8FF; color: #003D99; }
+  .chip-descanso { background: #E8E8E8; color: #666; }
+  .plato-resumen { font-size: 6.8pt; line-height: 1.4; }
+  .plato-resumen strong { font-weight: 600; color: var(--verde); }
+
+  /* ===== SISTEMA HRV ===== */
+  .hrv-sistema {
+    padding: 20px 24px;
+  }
+  .hrv-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .hrv-card {
+    border-radius: 8px;
+    padding: 16px;
+    border: 1.5px solid;
+  }
+  .hrv-card.rojo { border-color: #e74c3c; background: #fdf0f0; }
+  .hrv-card.amarillo { border-color: #f39c12; background: #fdf8ec; }
+  .hrv-card.verde { border-color: #27ae60; background: #f0fdf4; }
+  .hrv-titulo {
+    font-weight: 700;
+    font-size: 9pt;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hrv-rango {
+    font-size: 12pt;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .hrv-item { font-size: 7.5pt; margin-bottom: 3px; padding-left: 8px; position: relative; }
+  .hrv-item::before { content: '—'; position: absolute; left: 0; color: var(--gris); }
+  
+  .casilla-hrv {
+    margin-top: 20px;
+    border: 1.5px solid var(--borde);
+    border-radius: 8px;
+    padding: 12px;
+    background: var(--crema);
+  }
+  .casilla-hrv h4 { font-size: 8pt; font-weight: 700; color: var(--verde); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  
+  .hrv-registro-fila {
+    display: grid;
+    grid-template-columns: 100px 100px 100px 1fr;
+    gap: 10px;
+    margin-bottom: 6px;
+    align-items: center;
+    font-size: 8pt;
+  }
+  .hrv-table-input {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid var(--borde);
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+  }
+  .hrv-badge-dinamico {
+    padding: 4px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 7.5pt;
+  }
+  .hrv-text-input {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid var(--borde);
+    border-radius: 4px;
+  }
+
+  /* ===== DIAS ===== */
+  .dia-pagina {
+    padding: 20px 24px;
+    border-top: 5px solid var(--verde);
+    margin-top: 30px;
+  }
+  .dia-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--verde);
+  }
+  .dia-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 20pt;
+    color: var(--verde);
+  }
+  .dia-fecha { font-size: 8pt; color: var(--gris); margin-top: 2px; }
+  .dia-meta { text-align: right; }
+  .dia-entreno-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 7.5pt;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .badge-strong { background: #FFE5CC; color: #B84800; }
+  .badge-hiit { background: #FFD6D6; color: #B80000; }
+  .badge-spin { background: #D6E8FF; color: #003D99; }
+  .badge-descanso { background: #E8E8E8; color: #555; }
+  
+  .dia-hrv-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 7.5pt;
+    color: var(--gris);
+  }
+  .hrv-input {
+    border: 1.5px solid var(--borde);
+    border-radius: 4px;
+    padding: 2px 8px;
+    width: 60px;
+    font-size: 8pt;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .bloque-comida {
+    margin-bottom: 12px;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .bloque-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    background: var(--verde-muy-claro);
+    border-bottom: 1px solid var(--borde);
+  }
+  .bloque-hora {
+    font-size: 7pt;
+    font-weight: 700;
+    color: var(--verde);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 55px;
+  }
+  .bloque-nombre {
+    font-size: 9pt;
+    font-weight: 700;
+    color: var(--verde);
+    flex: 1;
+  }
+
+  .ingredientes-tabla {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .ingredientes-tabla th {
+    background: #f0f0f0;
+    font-size: 7pt;
+    font-weight: 600;
+    padding: 4px 8px;
+    text-align: left;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .ingredientes-tabla th.cant-col { width: 100px; text-align: center; }
+  .ingredientes-tabla th.ajuste-col { width: 90px; text-align: center; }
+  .ingredientes-tabla td {
+    padding: 4px 8px;
+    font-size: 7.5pt;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+  }
+  .ingredientes-tabla td.cant { text-align: center; font-weight: 600; color: var(--verde); }
+  .ingredientes-tabla td.ajuste { text-align: center; font-weight: bold; color: #e07a2f; }
+
+  .receta-bloque {
+    padding: 8px 10px;
+    background: #fafafa;
+    border-top: 1px solid #eee;
+  }
+  .receta-titulo {
+    font-size: 7pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gris);
+    margin-bottom: 5px;
+  }
+  .paso {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 4px;
+    margin-bottom: 3px;
+    font-size: 7.5pt;
+    line-height: 1.4;
+  }
+  .paso-num { font-weight: 700; color: var(--verde); font-size: 7pt; }
+
+  .suplementos-box {
+    background: var(--crema);
+    border: 1px solid var(--naranja-claro);
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-top: 10px;
+    font-size: 7.5pt;
+  }
+  .suplementos-titulo { font-weight: 700; color: var(--naranja); font-size: 7.5pt; margin-bottom: 4px; }
+  .nota-cena {
+    background: #FFF8E1;
+    border-left: 3px solid var(--naranja);
+    padding: 5px 8px;
+    font-size: 7.5pt;
+    font-style: italic;
+    margin-bottom: 8px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* ===== LISTA DE LA COMPRA ===== */
+  .lista-compra {
+    margin-top: 30px;
+    padding: 20px 24px;
+    border-top: 4px dashed var(--verde);
+  }
+  .compra-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 16px;
+  }
+  @media (max-width: 768px) {
+    .compra-grid, .hrv-grid { grid-template-columns: 1fr; }
+  }
+  .compra-categoria h4 {
+    background: var(--verde);
+    color: white;
+    padding: 4px 8px;
+    font-size: 7.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 4px 4px 0 0;
+  }
+  .compra-items {
+    border: 1px solid var(--borde);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    padding: 6px 8px;
+  }
+  .compra-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px dotted #eee;
+    font-size: 7.5pt;
+    cursor: pointer;
+  }
+  .compra-item.completado {
+    text-decoration: line-through;
+    opacity: 0.5;
+  }
+  .compra-item input[type="checkbox"] {
+    cursor: pointer;
+  }
+  .compra-cantidad { font-weight: 700; color: var(--verde); min-width: 35px; }
+
+  .fruta-tag { background: #FFF3CD; border: 1px solid #FFD700; border-radius: 10px; padding: 1px 6px; font-size: 6.5pt; font-weight: 600; color: #996600; }
+  .proteina-tag { background: #E8F5E9; border: 1px solid var(--verde-claro); border-radius: 10px; padding: 1px 6px; font-size: 6.5pt; font-weight: 600; color: var(--verde); }
+  .carbo-tag { background: #E3F2FD; border: 1px solid #90CAF9; border-radius: 10px; padding: 1px 6px; font-size: 6.5pt; font-weight: 600; color: #1565C0; }
+</style>
+</head>
+<body>
+
+<!-- ===== PORTADA ===== -->
+<div class="portada">
+  <div class="logo">NUTRIPLAN</div>
+  <div class="subtitulo">Plan Dietético Adaptativo</div>
+  <div class="nombre">Antonio Jiménez Sáez</div>
+  <div class="semana">Semana 28 Jun – 4 Jul 2026</div>
+  <div class="datos-base">
+    <div class="dato"><div class="dato-valor">78.35 kg</div><div class="dato-label">Peso actual</div></div>
+    <div class="dato"><div class="dato-valor">16.6%</div><div class="dato-label">Grasa corporal</div></div>
+    <div class="dato"><div class="dato-valor">62 kg</div><div class="dato-label">Masa muscular</div></div>
+    <div class="dato"><div class="dato-valor">13–14%</div><div class="dato-label">Objetivo grasa</div></div>
+    <div class="dato"><div class="dato-valor">175–185g</div><div class="dato-label">Proteína/día</div></div>
+    <div class="dato"><div class="dato-valor">1773 kcal</div><div class="dato-label">TMB base</div></div>
+  </div>
+  <div class="objetivo">🎯 OBJETIVO: Pérdida de grasa preservando masa muscular</div>
+  <div class="nota-hrv">Introduce tu VFC cada día. El sistema calculará y actualizará dinámicamente tus porciones adaptadas de carbohidratos.</div>
+</div>
+
+<!-- ===== SISTEMA HRV ===== -->
+<div class="hrv-sistema">
+  <div class="encabezado-seccion"><h2>Sistema de Ajuste por VFC (HRV)</h2></div>
+  <div class="hrv-grid">
+    <div class="hrv-card rojo">
+      <div class="hrv-titulo" style="color:#e74c3c">🔴 VFC BAJA (&lt; 42 ms)</div>
+      <div class="hrv-item">Déficit máximo. Carbohidratos mínimos.</div>
+    </div>
+    <div class="hrv-card amarillo">
+      <div class="hrv-titulo" style="color:#e67e22">🟡 VFC MODERADA (42–70 ms)</div>
+      <div class="hrv-item">Déficit moderado (Porciones base).</div>
+    </div>
+    <div class="hrv-card verde">
+      <div class="hrv-titulo" style="color:#27ae60">🟢 VFC ALTA (71–110 ms)</div>
+      <div class="hrv-item">Déficit bajo. Carbohidratos base +15g.</div>
+    </div>
+  </div>
+
+  <!-- REGISTRO INTERACTIVO -->
+  <div class="casilla-hrv">
+    <h4>📋 Registro Semanal de VFC y Ajuste</h4>
+    <div class="hrv-registro-fila" style="font-weight:700; color:#555; border-bottom:1px solid #ccc; padding-bottom:4px;">
+      <span>DÍA</span><span>VFC (ms)</span><span>NIVEL</span><span>AJUSTE APLICADO</span>
+    </div>
+    
+    <!-- Filas enlazadas por ID -->
+    <div class="hrv-registro-fila" data-day="dom">
+      <span>Dom 29 Jun</span>
+      <input type="number" class="hrv-table-input" id="input-dom" placeholder="—">
+      <div class="hrv-badge-dinamico" id="badge-dom">—</div>
+      <input type="text" class="hrv-text-input" id="txt-dom" placeholder="Notas de ajuste...">
+    </div>
+    <div class="hrv-registro-fila" data-day="lun">
+      <span>Lun 30 Jun</span>
+      <input type="number" class="hrv-table-input" id="input-lun" placeholder="—">
+      <div class="hrv-badge-dinamico" id="badge-lun">—</div>
+      <input type="text" class="hrv-text-input" id="txt-lun" placeholder="Notas de ajuste...">
+    </div>
+    <div class="hrv-registro-fila" data-day="mar">
+      <span>Mar 1 Jul</span>
+      <input type="number" class="hrv-table-input" id="input-mar" placeholder="—">
+      <div class="hrv-badge-dinamico" id="badge-mar">—</div>
+      <input type="text" class="hrv-text-input" id="txt-mar" placeholder="Notas de ajuste...">
+    </div>
+    <div class="hrv-registro-fila" data-day="mie">
+      <span>Mié 2 Jul</span>
+      <input type="number" class="hrv-table-input" id="input-mie" placeholder="—">
+      <div class="hrv-badge-dinamico" id="badge-mie">—</div>
+      <input type="text" class="hrv-text-input" id="txt-mie" placeholder="Notas de ajuste...">
+    </div>
+    <div class="hrv-registro-fila" data-day="jue">
+      <span>Jue 3 Jul</span>
+      <input type="number" class="hrv-table-input" id="input-jue" placeholder="—">
+      <div class="hrv-badge-dinamico" id="badge-jue">—</div>
+      <input type="text" class="hrv-text-input" id="txt-jue" placeholder="Notas de ajuste...">
+    </div>
+    <div class="hrv-registro-fila" data-day="vie">
+      <span>Vie 4 Jul</span>
+      <input type="number" class="hrv-table-input" id="input-vie" placeholder="—">
+      <div class="hrv-badge-dinamico" id="badge-vie">—</div>
+      <input type="text" class="hrv-text-input" id="txt-vie" placeholder="Notas de ajuste...">
+    </div>
+    <div class="hrv-registro-fila" data-day="sab">
+      <span>Sáb 5 Jul</span>
+      <input type="number" class="hrv-table-input" id="input-sab" placeholder="—">
+      <div class="hrv-badge-dinamico" id="badge-sab">—</div>
+      <input type="text" class="hrv-text-input" id="txt-sab" placeholder="Notas de ajuste...">
+    </div>
+  </div>
+</div>
+
+<!-- ===== DÍA 1: DOMINGO 29 JUN ===== -->
+<div class="dia-pagina">
+  <div class="dia-header">
+    <div>
+      <div class="dia-titulo">Domingo 29 Jun</div>
+      <div class="dia-fecha">Día de descanso</div>
+    </div>
+    <div class="dia-meta"><span class="dia-entreno-badge badge-descanso">🛌 DESCANSO</span></div>
+  </div>
+
+  <div class="bloque-comida">
+    <div class="bloque-header"><span class="bloque-hora">Desayuno</span><span class="bloque-nombre">Yogur griego con frutos rojos</span></div>
+    <table class="ingredientes-tabla">
+      <tr><td>Yogur griego 0%</td><td class="cant">250g</td><td class="ajuste">—</td></tr>
+    </table>
+  </div>
+
+  <div class="bloque-comida">
+    <div class="bloque-header"><span class="bloque-hora">Comida</span><span class="bloque-nombre">Quinoa fría adaptativa</span><span class="carbo-tag">Carbo</span></div>
+    <table class="ingredientes-tabla">
+      <!-- data-base indica los gramos base para calcular automáticamente -->
+      <tr class="ingrediente-adaptativo" data-day="dom" data-base="75">
+        <td>Quinoa (en seco)</td><td class="cant">75g</td><td class="ajuste" id="calc-dom-quinoa">—</td>
+      </tr>
+      <tr><td>Atún al natural</td><td class="cant">120g</td><td class="ajuste">—</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== DÍA 2: LUNES 30 JUN ===== -->
+<div class="dia-pagina">
+  <div class="dia-header">
+    <div><div class="dia-titulo">Lunes 30 Jun</div><div class="dia-fecha">Entreno Strong</div></div>
+    <div class="dia-meta"><span class="dia-entreno-badge badge-strong">💪 STRONG 45'</span></div>
+  </div>
+
+  <div class="bloque-comida">
+    <div class="bloque-header"><span class="bloque-hora">Desayuno</span><span class="bloque-nombre">Avena Post-Entreno</span><span class="carbo-tag">Carbo</span></div>
+    <table class="ingredientes-tabla">
+      <tr class="ingrediente-adaptativo" data-day="lun" data-base="75">
+        <td>Avena en copos</td><td class="cant">75g</td><td class="ajuste" id="calc-lun-avena">—</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="bloque-comida">
+    <div class="bloque-header"><span class="bloque-hora">Comida</span><span class="bloque-nombre">Lentejas estofadas</span><span class="carbo-tag">Legumbre</span></div>
+    <table class="ingredientes-tabla">
+      <tr class="ingrediente-adaptativo" data-day="lun" data-base="80">
+        <td>Lentejas pardinas</td><td class="cant">80g</td><td class="ajuste" id="calc-lun-lentejas">—</td>
+      </tr>
+      <tr><td>Salmón al horno</td><td class="cant">180g</td><td class="ajuste">—</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== DÍA 3: MARTES 1 JUL ===== -->
+<div class="dia-pagina">
+  <div class="dia-header">
+    <div><div class="dia-titulo">Martes 1 Jul</div><div class="dia-fecha">Entreno HIIT</div></div>
+    <div class="dia-meta"><span class="dia-entreno-badge badge-hiit">🔥 HIIT / BURN</span></div>
+  </div>
+
+  <div class="bloque-comida">
+    <div class="bloque-header"><span class="bloque-hora">Comida</span><span class="bloque-nombre">Garbanzos con atún</span><span class="carbo-tag">Legumbre</span></div>
+    <table class="ingredientes-tabla">
+      <tr class="ingrediente-adaptativo" data-day="mar" data-base="200">
+        <td>Garbanzos cocidos</td><td class="cant">200g</td><td class="ajuste" id="calc-mar-garbanzos">—</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== DÍA 4: MIÉRCOLES 2 JUL ===== -->
+<div class="dia-pagina">
+  <div class="dia-header">
+    <div><div class="dia-titulo">Miércoles 2 Jul</div><div class="dia-fecha">Entreno Spinning</div></div>
+    <div class="dia-meta"><span class="dia-entreno-badge badge-spin">🚴 SPINNING</span></div>
+  </div>
+
+  <div class="bloque-comida">
+    <div class="bloque-header"><span class="bloque-hora">Comida</span><span class="bloque-nombre">Pollo al chilindrón con quinoa</span><span class="carbo-tag">Carbo</span></div>
+    <table class="ingredientes-tabla">
+      <tr class="ingrediente-adaptativo" data-day="mie" data-base="80">
+        <td>Quinoa en seco</td><td class="cant">80g</td><td class="ajuste" id="calc-mie-quinoa">—</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== DÍA 5: JUEVES 3 JUL ===== -->
+<div class="dia-pagina">
+  <div class="dia-header">
+    <div><div class="dia-titulo">Jueves 3 Jul</div><div class="dia-fecha">Entreno Strong</div></div>
+    <div class="dia-meta"><span class="dia-entreno-badge badge-strong">💪 STRONG</span></div>
+  </div>
+
+  <div class="bloque-comida">
+    <div class="bloque-header"><span class="bloque-hora">Comida</span><span class="bloque-nombre">Lentejas con huevo</span><span class="carbo-tag">Legumbre</span></div>
+    <table class="ingredientes-tabla">
+      <tr class="ingrediente-adaptativo" data-day="jue" data-base="80">
+        <td>Lentejas en seco</td><td class="cant">80g</td><td class="ajuste" id="calc-jue-lentejas">—</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== DÍA 6: VIERNES 4 JUL ===== -->
+<div class="dia-pagina">
+  <div class="dia-header">
+    <div><div class="dia-titulo">Viernes 4 Jul</div><div class="dia-fecha">Entreno Spinning</div></div>
+    <div class="dia-meta"><span class="dia-entreno-badge badge-spin">🚴 SPINNING</span></div>
+  </div>
+
+  <div class="bloque-comida">
+    <div class="bloque-header"><span class="bloque-hora">Comida</span><span class="bloque-nombre">Arroz meloso con sepia</span><span class="carbo-tag">Arroz</span></div>
+    <table class="ingredientes-tabla">
+      <tr class="ingrediente-adaptativo" data-day="vie" data-base="85">
+        <td>Arroz bomba</td><td class="cant">85g</td><td class="ajuste" id="calc-vie-arroz">—</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== DÍA 7: SÁBADO 5 JUL ===== -->
+<div class="dia-pagina">
+  <div class="dia-header">
+    <div><div class="dia-titulo">Sábado 5 Jul</div><div class="dia-fecha">Día de descanso</div></div>
+    <div class="dia-meta"><span class="dia-entreno-badge badge-descanso">🛌 DESCANSO</span></div>
+  </div>
+  <div class="bloque-comida">
+    <div class="bloque-header"><span class="bloque-hora">Comida</span><span class="bloque-nombre">Pulpo a feira (sin patata fijo)</span></div>
+    <table class="ingredientes-tabla">
+      <tr><td>Pulpo cocido</td><td class="cant">200g</td><td class="ajuste">Sin Carbohidrato</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== LISTA DE LA COMPRA INTERACTIVA ===== -->
+<div class="lista-compra">
+  <div class="encabezado-seccion"><h2>Lista de la Compra Interactiva (Toca para tachar)</h2></div>
+  <div class="compra-grid">
+    <div class="compra-categoria">
+      <h4>🥩 Carnes y Aves</h4>
+      <div class="compra-items">
+        <label class="compra-item"><input type="checkbox" id="c1"> <span class="compra-cantidad">600g</span> Pechuga de pollo</label>
+        <label class="compra-item"><input type="checkbox" id="c2"> <span class="compra-cantidad">400g</span> Contramuslo pollo</label>
+        <label class="compra-item"><input type="checkbox" id="c3"> <span class="compra-cantidad">380g</span> Filete de pavo</label>
+      </div>
+    </div>
+    <div class="compra-categoria">
+      <h4>🐟 Pescados</h4>
+      <div class="compra-items">
+        <label class="compra-item"><input type="checkbox" id="c4"> <span class="compra-cantidad">380g</span> Salmón</label>
+        <label class="compra-item"><input type="checkbox" id="c5"> <span class="compra-cantidad">200g</span> Pez espada</label>
+        <label class="compra-item"><input type="checkbox" id="c6"> <span class="compra-cantidad">200g</span> Pulpo cocido</label>
+      </div>
+    </div>
+    <div class="compra-categoria">
+      <h4>🫘 Despensa</h4>
+      <div class="compra-items">
+        <label class="compra-item"><input type="checkbox" id="c7"> <span class="compra-cantidad">600g</span> Avena en copos</label>
+        <label class="compra-item"><input type="checkbox" id="c8"> <span class="compra-cantidad">350g</span> Quinoa</label>
+        <label class="compra-item"><input type="checkbox" id="c9"> <span class="compra-cantidad">170g</span> Arroz bomba</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LÓGICA DE PROGRAMACIÓN DE LA APP (JAVASCRIPT) ===== -->
+<script>
+  // Función para procesar la VFC de cada día y recalcular
+  function actualizarDia(day, hrvValue) {
+    const badge = document.getElementById(`badge-${day}`);
+    const inputsAdaptativos = document.querySelectorAll(`.ingrediente-adaptativo[data-day="${day}"]`);
+    
+    if (!hrvValue) {
+      if(badge) { badge.textContent = "—"; badge.style.backgroundColor = "transparent"; badge.style.color = "black"; }
+      inputsAdaptativos.forEach(tr => {
+        const idCalc = tr.querySelector('.ajuste').id;
+        document.getElementById(idCalc).textContent = "—";
+      });
+      return;
+    }
+
+    let tipo = "";
+    let modCarbo = 0; // Gramos a sumar o restar
+
+    if (hrvValue < 42) {
+      tipo = "ROJO";
+      if(badge) { badge.textContent = "🔴 BAJA"; badge.style.backgroundColor = "#fdf0f0"; badge.style.color = "#e74c3c"; }
+      // En rojo reducimos drásticamente los carbohidratos base
+      modCarbo = -30; 
+    } else if (hrvValue >= 42 && hrvValue <= 70) {
+      tipo = "AMARILLO";
+      if(badge) { badge.textContent = "🟡 MODERADA"; badge.style.backgroundColor = "#fdf8ec"; badge.style.color = "#e67e22"; }
+      modCarbo = 0; // Se queda la porción base
+    } else if (hrvValue > 70 && hrvValue <= 110) {
+      tipo = "VERDE";
+      if(badge) { badge.textContent = "🟢 ALTA"; badge.style.backgroundColor = "#f0fdf4"; badge.style.color = "#27ae60"; }
+      modCarbo = 15; // Añadimos 15 gramos
+    } else {
+      tipo = "⚡ MAX";
+      if(badge) { badge.textContent = "⚡ EXCEPCIONAL"; badge.style.backgroundColor = "#e6f7ed"; badge.style.color = "#1a7a40"; }
+      modCarbo = 25; // Añadimos 25 gramos por estado excepcional
+    }
+
+    // Aplicar los cálculos a las tablas de menús automáticamente
+    inputsAdaptativos.forEach(tr => {
+      const baseGramos = parseInt(tr.getAttribute('data-base'));
+      const idCalc = tr.querySelector('.ajuste').id;
+      let finalGramos = baseGramos + modCarbo;
+      if (finalGramos < 10) finalGramos = 10; // Evitar valores negativos o ridículamente bajos
+      
+      document.getElementById(idCalc).textContent = `Ajustar a: ${finalGramos}g (${tipo})`;
+    });
+  }
+
+  // Guardar y cargar datos en el almacenamiento local del móvil/PC
+  const inputsHrv = document.querySelectorAll('.hrv-table-input');
+  const inputsTxt = document.querySelectorAll('.hrv-text-input');
+  const checkboxes = document.querySelectorAll('.compra-item input');
+
+  function guardarProgreso() {
+    const datos = { hrv: {}, notas: {}, compra: {} };
+    inputsHrv.forEach(i => datos.hrv[i.id] = i.value);
+    inputsTxt.forEach(i => datos.notas[i.id] = i.value);
+    checkboxes.forEach(c => datos.compra[c.id] = c.checked);
+    localStorage.setItem('nutriplan_data_v2', JSON.stringify(datos));
+  }
+
+  function cargarProgreso() {
+    const datosGuardados = localStorage.getItem('nutriplan_data_v2');
+    if (!datosGuardados) return;
+    const datos = JSON.parse(datosGuardados);
+
+    inputsHrv.forEach(i => {
+      if(datos.hrv[i.id]) {
+        i.value = datos.hrv[i.id];
+        const day = i.id.replace('input-', '');
+        actualizarDia(day, parseInt(i.value));
+      }
+    });
+    inputsTxt.forEach(i => { if(datos.notas[i.id]) i.value = datos.notas[i.id]; });
+    checkboxes.forEach(c => {
+      if(datos.compra[c.id]) {
+        c.checked = datos.compra[c.id];
+        if(c.checked) c.parentElement.classList.add('completado');
+      }
+    });
+  }
+
+  // Escuchar eventos de escritura
+  inputsHrv.forEach(input => {
+    input.addEventListener('input', (e) => {
+      const day = e.target.id.replace('input-', '');
+      actualizarDia(day, parseInt(e.target.value));
+      guardarProgreso();
+    });
+  });
+
+  inputsTxt.forEach(input => input.addEventListener('input', guardarProgreso));
+
+  checkboxes.forEach(ch => {
+    ch.addEventListener('change', (e) => {
+      if(e.target.checked) {
+        e.target.parentElement.classList.add('completado');
+      } else {
+        e.target.parentElement.classList.remove('completado');
+      }
+      guardarProgreso();
+    });
+  });
+
+  // Ejecutar al abrir la app
+  window.addEventListener('load', cargarProgreso);
+</script>
+</body>
+</html>
